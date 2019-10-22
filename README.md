@@ -6,6 +6,8 @@ Initial release tested for armhf and aarch64.
 
 Usage: ./termux-setup {full | vim | powerline | style}
 
+For debugging uncomment the 10th line of script
+that begins with "#trap 'echo"
 
 Projects used by this script:
 
