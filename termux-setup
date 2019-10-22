@@ -1,0 +1,204 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# exit when any command fails
+set -e
+
+# keep track of the last executed command
+trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+
+# echo an error message before exiting
+#trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+
+# begin script options
+case "$1" in
+        full)
+
+# check if termux has already been set up.
+if [ -f /data/data/com.termux/files/usr/bin/asciidoc ];
+     then
+         echo "Full setup already complete."
+         exit 0 
+else
+
+echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
+# Tier 1: requirements for the core build scripts in termux-packages/scripts/build/
+PACKAGES="binutils-gold"	# Part of binutils which is dependency of clang.
+PACKAGES+=" clang"			# C/C++ packages.
+PACKAGES+=" file"			# Used in termux_step_massage().
+PACKAGES+=" lzip"			# Used by tar to extract *.tar.lz source archives.
+PACKAGES+=" patch"			# Used for applying patches on source code.
+PACKAGES+=" python"			# Used buildorder.py core script.
+PACKAGES+=" unzip"			# Used to extract *.zip source archives.
+
+# Tier 2: requirements for building many other packages.
+PACKAGES+=" asciidoc"
+PACKAGES+=" autoconf"
+PACKAGES+=" automake"
+PACKAGES+=" bc"
+PACKAGES+=" bison"
+PACKAGES+=" cmake"
+PACKAGES+=" ed"
+PACKAGES+=" flex"
+PACKAGES+=" gettext"
+PACKAGES+=" git"
+# PACKAGES+=" golang"
+PACKAGES+=" gperf"
+PACKAGES+=" help2man"
+PACKAGES+=" libtool"
+PACKAGES+=" m4"
+PACKAGES+=" make"			# Used for all Makefile-based projects.
+PACKAGES+=" ninja"			# Used by default to build all CMake projects.
+PACKAGES+=" perl"
+PACKAGES+=" pkg-config"
+PACKAGES+=" protobuf"
+PACKAGES+=" python2"
+# PACKAGES+=" rust"
+PACKAGES+=" texinfo"
+PACKAGES+=" valac"
+
+# Personal additions to package list
+
+PACKAGES+=" vim-runtime"
+PACKAGES+=" ncurses"
+PACKAGES+=" libiconv"
+PACKAGES+=" diffutils"
+PACKAGES+=" nodejs"
+PACKAGES+=" mlocate"
+PACKAGES+=" wget"
+PACKAGES+=" nodejs"
+PACKAGES+=" bash-completion"
+PACKAGES+=" termux-api"
+PACKAGES+=" w3m"
+PACKAGES+=" tmux"
+PACKAGES+=" openssh"
+PACKAGES+=" figlet"
+PACKAGES+=" ncurses-utils"
+PACKAGES+=" libjpeg-turbo"
+PACKAGES+=" vim-charlie"
+PACKAGES+=" imgcat"
+PACKAGES+=" build-essential"
+
+
+apt update
+apt dist-upgrade -y
+apt install -y $PACKAGES
+
+# Vim setup
+mkdir -p ~/gits
+vim -c 'PlugInstall'
+vim -c 'CocInstall coc-marketplace coc-html coc-css coc-json'
+
+# Powerline Shell setup
+
+pip install powerline-shell
+curl -fLo ~/.config/powerline-shell/config.json \
+    --create-dirs https://voz.dev/config.json
+pip install speedtest-cli
+
+# .bashrc setup
+
+cd && wget voz.dev/termuxbrc
+mv termuxbrc ~/.bashrc
+
+# SSH key setup
+
+curl -fLo ~/.ssh/vkaints \
+    --create-dirs https://voz.dev/vkaints
+
+curl -fLo ~/.ssh/vkaints.pub \
+    --create-dirs https://voz.dev/vkaints.pub
+
+# Termux extra row setup
+
+curl -fLo ~/.termux/termux.properties \
+    --create-dirs https://voz.dev/termux.properties
+
+# Tmux setup
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+curl -fLo ~/.tmux.conf \
+    --create-dirs https://voz.dev/tmuxc
+
+# Case insensitive tab completion.
+
+echo 'set completion-ignore-case on' >> \
+    /data/data/com.termux/files/usr/etc/inputrc
+
+# Font installation
+
+cd /data/data/com.termux/files/usr/share
+curl voz.dev/termux-style.tar | tar x
+cd /data/data/com.termux/files/usr/share/figlet
+curl voz.dev/figfonts.tar | tar x
+ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
+    /data/data/com.termux/files/usr/bin/termux-style
+fi
+            ;;
+
+        vim)
+if [ -f ~/.vim_runtime/install_awesome_vimrc.sh ];
+     then
+         echo "Vim setup already complete."
+         exit 0 
+else
+
+echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
+
+PACKAGES=" vim-runtime"
+PACKAGES+=" ncurses"
+PACKAGES+=" libiconv"
+PACKAGES+=" diffutils"
+PACKAGES+=" nodejs"
+PACKAGES+=" vim-charlie"
+
+
+apt update
+apt dist-upgrade -y
+apt install -y $PACKAGES
+
+# Vim setup
+
+vim -c 'PlugInstall'
+vim -c 'CocInstall coc-marketplace coc-html coc-css coc-json'
+
+fi
+            ;;
+
+        powerline)
+if [ -f ~/.config/powerline-shell/config.json ];
+     then
+         echo "Powerline setup already complete."
+         exit 0
+     else
+# Powerline Shell setup
+
+pip install powerline-shell
+curl -fLo ~/.config/powerline-shell/config.json \
+    --create-dirs https://voz.dev/config.json
+     fi
+
+            ;;
+        style)
+if [ -f /data/data/com.termux/files/usr/share/termux-style/termux-style ];
+     then
+         echo "Font setup already complete."
+         exit 0
+     else
+            
+# Font installation
+
+cd /data/data/com.termux/files/usr/share
+curl voz.dev/termux-style.tar | tar x
+cd /data/data/com.termux/files/usr/share/figlet
+curl voz.dev/figfonts.tar | tar x
+ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
+    /data/data/com.termux/files/usr/bin/termux-style
+fi
+            ;;
+
+        *)
+echo $"Usage: termux-setup full | vim | powerline | style "
+            exit 0 
+
+esac

@@ -1,0 +1,22 @@
+{
+  "name": "termux-setup",
+  "version": "1.0.0",
+  "description": "Setup script wrapper for termux.",
+  "main": "./termux-setup",
+  "scripts": {
+    "test": "./termux-setup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vozdev/termux-setup.git"
+  },
+  "keywords": [
+    "termux"
+  ],
+  "author": "Charles Northcutt",
+  "license": "SEE LICENSE IN ./LICENSE",
+  "bugs": {
+    "url": "https://github.com/vozdev/termux-setup/issues"
+  },
+  "homepage": "https://github.com/vozdev/termux-setup#readme"
+}
