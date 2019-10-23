@@ -39,8 +39,11 @@ echo -e "\n"
 fi
 
 # begin script options
+
 case "$1" in
         full)
+
+
 
 # check if termux has already been set up.
 if [ -f /data/data/com.termux/files/usr/bin/asciidoc ];
@@ -51,8 +54,11 @@ echo -e "\n"
          exit 0 
 else
     print_center Starting Setup...
-sleep 4
-echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
+echo -e "\n"
+echo -e "\n"
+source ./progress-bar.sh
+progress-bar 3
+    echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
 # Tier 1: requirements for the core build scripts in termux-packages/scripts/build/
 PACKAGES="binutils-gold"	# Part of binutils which is dependency of clang.
 PACKAGES+=" clang"			# C/C++ packages.
@@ -149,11 +155,15 @@ curl -fLo ~/.termux/termux.properties \
 
 # Tmux setup
 
+if [ -f /data/data/com.termux/files/home/.tmux/plugins/tpm/tpm ];
+     then
+         echo ""
+     else
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 curl -fLo ~/.tmux.conf \
     --create-dirs https://voz.dev/tmuxc
-
+fi
 # Case insensitive tab completion.
 
 echo 'set completion-ignore-case on' >> \
@@ -165,9 +175,24 @@ cd /data/data/com.termux/files/usr/share
 curl voz.dev/termux-style.tar | tar x
 cd /data/data/com.termux/files/usr/share/figlet
 curl voz.dev/figfonts.tar | tar x
+
+
+if [ -f /data/data/com.termux/files/usr/bin/termux-style ];
+     then
+print_center Setup Complete
+else
 ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
     /data/data/com.termux/files/usr/bin/termux-style
+
+
+echo -e "\n"
+echo -e "\n"
+
+print_center SETUP COMPLETE
+
 fi
+fi
+
             ;;
 
         vim)
