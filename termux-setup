@@ -1,4 +1,4 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/bin/bash
 
 # exit when any command fails
 set -e
@@ -50,7 +50,8 @@ echo -e "\n"
 echo -e "\n"
          exit 0 
 else
-
+    print_center Starting Setup...
+sleep 4
 echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
 # Tier 1: requirements for the core build scripts in termux-packages/scripts/build/
 PACKAGES="binutils-gold"	# Part of binutils which is dependency of clang.
