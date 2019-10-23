@@ -9,6 +9,27 @@ trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 # echo an error message before exiting
 #trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
+print_center(){
+    local x
+    local y
+    text="$*"
+    x=$(( ($(tput cols) - ${#text}) / 2))
+    echo -ne "\E[6n";read -sdR y; y=$(echo -ne "${y#*[}" | cut -d';' -f1)
+    echo -ne "\033[${y};${x}f$*"
+}
+
+# main()
+
+# clear the screen, put the cursor at line 10, and set the text color
+# to light blue.
+echo -ne "\\033[2J\033[10;1f\e[94m"
+
+# do it!
+print_center 'TERMUX SETUP'
+echo -e "\n"
+echo -e "\n"
+
+
 # begin script options
 case "$1" in
         full)
@@ -16,7 +37,9 @@ case "$1" in
 # check if termux has already been set up.
 if [ -f /data/data/com.termux/files/usr/bin/asciidoc ];
      then
-         echo "Full setup already complete."
+         print_center "Full setup already complete."
+echo -e "\n"
+echo -e "\n"
          exit 0 
 else
 
@@ -141,7 +164,9 @@ fi
         vim)
 if [ -f ~/.vim_runtime/install_awesome_vimrc.sh ];
      then
-         echo "Vim setup already complete."
+         print_center "Vim setup already complete."
+echo -e "\n"
+echo -e "\n"
          exit 0 
 else
 
@@ -170,7 +195,9 @@ fi
         powerline)
 if [ -f ~/.config/powerline-shell/config.json ];
      then
-         echo "Powerline setup already complete."
+         print_center "Powerline setup already complete."
+echo -e "\n"
+echo -e "\n"
          exit 0
      else
 # Powerline Shell setup
@@ -184,7 +211,9 @@ curl -fLo ~/.config/powerline-shell/config.json \
         style)
 if [ -f /data/data/com.termux/files/usr/share/termux-style/termux-style ];
      then
-         echo "Font setup already complete."
+         print_center "Font setup already complete."
+echo -e "\n"
+echo -e "\n"
          exit 0
      else
             
@@ -200,7 +229,9 @@ fi
             ;;
 
         *)
-echo $"Usage: termux-setup full | vim | powerline | style "
+print_center $"Usage: termux-setup full | vim | powerline | style "
+echo -e "\n"
+echo -e "\n"
             exit 0 
 
 esac
