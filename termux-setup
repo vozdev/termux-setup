@@ -29,6 +29,14 @@ print_center 'TERMUX SETUP'
 echo -e "\n"
 echo -e "\n"
 
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+
+         print_center "This scrpit is for termux only."
+
+echo -e "\n"
+echo -e "\n"
+         exit 0 
+fi
 
 # begin script options
 case "$1" in
