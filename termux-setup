@@ -76,6 +76,8 @@ PACKAGES+=" ncurses-utils"
 PACKAGES+=" libjpeg-turbo"
 PACKAGES+=" vim-charlie"
 PACKAGES+=" imgcat"
+PACKAGES+=" termux-setup"
+PACKAGES+=" fast"
 PACKAGES+=" build-essential"
 
 
