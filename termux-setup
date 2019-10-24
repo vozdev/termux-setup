@@ -256,7 +256,7 @@ apt install -y $PACKAGES >> .termux.log 2>&1
 
 git config --global user.email "charles@voz.dev" >> .termux.log 2>&1
 git config --global user.name "vozdev" >> .termux.log 2>&1
-
+stop_spinner 0
 # Vim setup
 mkdir -p ~/gits >> .termux.log 2>&1
 if [ -f /data/data/com.termux/files/home/.vim_runtime/plugged/coc.nvim/package.json ];
@@ -267,6 +267,9 @@ if [ -f /data/data/com.termux/files/home/.vim_runtime/plugged/coc.nvim/package.j
 vim -c 'PlugInstall'
 vim -c 'CocInstall coc-marketplace coc-html coc-css coc-json'
 fi
+
+start_spinner
+
 # Powerline Shell setup
 
 pip install powerline-shell >> .termux.log 2>&1
@@ -315,10 +318,10 @@ if [ ! -f /data/data/com.termux/files/usr/bin/termux-style ];
      then
 
 cd /data/data/com.termux/files/usr/share
-curl voz.dev/termux-style.tar | tar x >> .termux.log 2>&1
+wget voz.dev/termux-style.tar >> .termux. log 2>&1 && tar xf termux-style.tar >> .termux.log 2>&1
 
 cd /data/data/com.termux/files/usr/share/figlet
-curl voz.dev/figfonts.tar | tar x >> .termux.log 2>&1
+wget voz.dev/figfonts.tar >> .termux. log 2>&1 && tar xf figfonts.tar >> .termux.log 2>&1
 
 ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
     /data/data/com.termux/files/usr/bin/termux-style >> .termux.log 2>&1
@@ -327,8 +330,6 @@ ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
 
 termux-style
 
-echo -e "\n"
-echo -e "\n"
 
 print_center SETUP COMPLETE
 
