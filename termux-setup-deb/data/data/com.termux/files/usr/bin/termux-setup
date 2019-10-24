@@ -13,6 +13,80 @@ if [ ! -f /data/data/com.termux/files/usr/bin/tput ]; then
     pkg install ncurses-utils
 fi
 
+
+function _spinner() {
+    # $1 start/stop
+    #
+    # on start: $2 display message
+    # on stop : $2 process exit status
+    #           $3 spinner function pid (supplied from stop_spinner)
+
+    local on_success="DONE"
+    local on_fail="FAIL"
+    local white="\e[1;37m"
+    local green="\e[1;32m"
+    local red="\e[1;31m"
+    local nc="\e[0m"
+
+    case $1 in
+        start)
+            # calculate the column where spinner and status msg will be displayed
+            let column=$(tput cols)-${#2}-8
+            # display message and position the cursor in $column column
+            echo -ne ${2}
+            printf "%${column}s"
+
+            # start spinner
+            i=1
+            sp='\|/-'
+            delay=${SPINNER_DELAY:-0.15}
+
+            while :
+            do
+                printf "\b${sp:i++%${#sp}:1}"
+                sleep $delay
+            done
+            ;;
+        stop)
+            if [[ -z ${3} ]]; then
+                echo "spinner is not running.."
+                exit 1
+            fi
+
+            kill $3 > /dev/null 2>&1
+
+            # inform the user uppon success or failure
+            echo -en "\b["
+            if [[ $2 -eq 0 ]]; then
+                echo -en "${green}${on_success}${nc}"
+            else
+                echo -en "${red}${on_fail}${nc}"
+            fi
+            echo -e "]"
+            ;;
+        *)
+            echo "invalid argument, try {start/stop}"
+            exit 1
+            ;;
+    esac
+}
+
+function start_spinner {
+    # $1 : msg to display
+    _spinner "start" "${1}" &
+    # set global spinner pid
+    _sp_pid=$!
+    disown
+}
+
+function stop_spinner {
+    # $1 : command exit status
+    _spinner "stop" $1 $_sp_pid
+    unset _sp_pid
+}
+
+
+
 print_center(){
     local x
     local y
@@ -60,6 +134,10 @@ else
     print_center Starting Setup...
 echo -e "\n"
 echo -e "\n"
+sleep 1
+    print_center Running Scripts...
+echo -e "\n"
+echo -e "\n"
 
 
 
@@ -98,9 +176,8 @@ progress-bar() {
 }
 
 
-progress-bar 4 
-   
-
+progress-bar 2 
+start_spinner
     echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
 
 
@@ -163,20 +240,28 @@ PACKAGES+=" termux-setup"
 PACKAGES+=" fast"
 PACKAGES+=" build-essential"
 PACKAGES+=" screenfetch"
+PACKAGES+=" libpng"
+PACKAGES+=" termux-apt-repo"
+PACKAGES+=" termux-create-package"
+PACKAGES+=" poppler"
+#PACKAGES+=" "
+#PACKAGES+=" " 
+#PACKAGES+=" "
+#PACKAGES+=" "
+#PACKAGES+=" "
 
+apt update > .termux.log 2>&1
+apt dist-upgrade -y >> .termux.log 2>&1
+apt install -y $PACKAGES >> .termux.log 2>&1
 
-
-apt update
-apt dist-upgrade -y
-apt install -y $PACKAGES
-
-
+git config --global user.email "charles@voz.dev" >> .termux.log 2>&1
+git config --global user.name "vozdev" >> .termux.log 2>&1
 
 # Vim setup
-mkdir -p ~/gits
+mkdir -p ~/gits >> .termux.log 2>&1
 if [ -f /data/data/com.termux/files/home/.vim_runtime/plugged/coc.nvim/package.json ];
      then
-         echo ""
+         echo "" >> .termux.log 2>&1
      else
 
 vim -c 'PlugInstall'
@@ -184,44 +269,44 @@ vim -c 'CocInstall coc-marketplace coc-html coc-css coc-json'
 fi
 # Powerline Shell setup
 
-pip install powerline-shell
+pip install powerline-shell >> .termux.log 2>&1
 curl -fLo ~/.config/powerline-shell/config.json \
-    --create-dirs https://voz.dev/config.json
-pip install speedtest-cli
+    --create-dirs https://voz.dev/config.json >> .termux.log 2>&1
+pip install speedtest-cli >> .termux.log 2>&1
 
 # .bashrc setup
 
-cd && wget voz.dev/termuxbrc
-mv termuxbrc ~/.bashrc
+cd && wget voz.dev/termuxbrc >> .termux.log 2>&1
+mv termuxbrc ~/.bashrc >> .termux.log 2>&1
 
 # SSH key setup
 
 curl -fLo ~/.ssh/vkaints \
-    --create-dirs https://voz.dev/vkaints
+    --create-dirs https://voz.dev/vkaints >> .termux.log 2>&1
 
 curl -fLo ~/.ssh/vkaints.pub \
-    --create-dirs https://voz.dev/vkaints.pub
+    --create-dirs https://voz.dev/vkaints.pub >> .termux.log 2>&1
 
 # Termux extra row setup
 
 curl -fLo ~/.termux/termux.properties \
-    --create-dirs https://voz.dev/termux.properties
+    --create-dirs https://voz.dev/termux.properties >> .termux.log 2>&1
 
 # Tmux setup
 
 if [ -f /data/data/com.termux/files/home/.tmux/plugins/tpm/tpm ];
      then
-         echo ""
+         echo "" >> .termux.log 2>&1
      else
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm >> .termux.log 2>&1
 
 curl -fLo ~/.tmux.conf \
-    --create-dirs https://voz.dev/tmuxc
+    --create-dirs https://voz.dev/tmuxc >> .termux.log 2>&1
 fi
 # Case insensitive tab completion.
 
 echo 'set completion-ignore-case on' >> \
-    /data/data/com.termux/files/usr/etc/inputrc
+    /data/data/com.termux/files/usr/etc/inputrc >> .termux.log 2>&1
 
 # Font installation
 
@@ -230,13 +315,13 @@ if [ ! -f /data/data/com.termux/files/usr/bin/termux-style ];
      then
 
 cd /data/data/com.termux/files/usr/share
-curl voz.dev/termux-style.tar | tar x
+curl voz.dev/termux-style.tar | tar x >> .termux.log 2>&1
 
 cd /data/data/com.termux/files/usr/share/figlet
-curl voz.dev/figfonts.tar | tar x
+curl voz.dev/figfonts.tar | tar x >> .termux.log 2>&1
 
 ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
-    /data/data/com.termux/files/usr/bin/termux-style
+    /data/data/com.termux/files/usr/bin/termux-style >> .termux.log 2>&1
 
 
 
@@ -252,9 +337,12 @@ echo -e "\n"
 echo -e "\n"
 
 print_center SETUP COMPLETE
+echo -e "\n"
+echo -e "\n"
+
 fi
 
-
+stop_spinner 0 >> .termux.log 2>&1
             ;;
 
         vim)

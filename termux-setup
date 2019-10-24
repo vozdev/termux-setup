@@ -133,6 +133,7 @@ echo -e "\n"
 else
     print_center Starting Setup...
 echo -e "\n"
+echo -e "\n"
 sleep 1
     print_center Running Scripts...
 echo -e "\n"
@@ -176,7 +177,6 @@ progress-bar() {
 
 
 progress-bar 2 
-source ./spinner.sh
 start_spinner
     echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
 
