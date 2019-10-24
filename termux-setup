@@ -351,6 +351,9 @@ echo -e "\n"
 
 fi
 
+
+touch /data/data/com.termux/files/usr/etc/.termux.setup
+
 stop_spinner 0 >> .termux.log 2>&1
             ;;
 
