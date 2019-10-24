@@ -321,8 +321,7 @@ curl -fLo ~/.tmux.conf \
 fi
 # Case insensitive tab completion.
 
-echo 'set completion-ignore-case on' >> \
-    /data/data/com.termux/files/usr/etc/inputrc >> .termux.log 2>&1
+echo 'set completion-ignore-case On' >> /data/data/com.termux/files/usr/etc/inputrc
 
 
 touch /data/data/com.termux/files/usr/etc/.termux.setup
