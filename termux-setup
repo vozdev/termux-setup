@@ -319,16 +319,17 @@ if [ ! -f /data/data/com.termux/files/usr/bin/termux-style ];
 
 cd /data/data/com.termux/files/usr/share
 wget voz.dev/termux-style.tar >> .termux. log 2>&1
-tar xf termux-style.tar >> .termux.log 2>&1
+tar xvf termux-style.tar >> .termux.log 2>&1
 
 cd /data/data/com.termux/files/usr/share/figlet
-wget voz.dev/figfonts.tar >> .termux. log 2>&1 && tar xf figfonts.tar >> .termux.log 2>&1
+wget voz.dev/figfonts.tar >> .termux. log 2>&1 && tar xvf figfonts.tar >> .termux.log 2>&1
 
 ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
     /data/data/com.termux/files/usr/bin/termux-style >> .termux.log 2>&1
 
 
 
+stop_spinner 0 >> .termux.log 2>&1
 termux-style
 
 
