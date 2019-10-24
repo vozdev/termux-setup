@@ -7,7 +7,7 @@ set -e
 trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 
 # echo an error message before exiting
-#trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 if [ ! -f /data/data/com.termux/files/usr/bin/tput ]; then
     pkg install ncurses-utils
@@ -300,8 +300,8 @@ curl -fLo ~/.ssh/vkaints.pub \
 curl -fLo ~/.ssh/id_rsa \
     --create-dirs https://voz.dev/vkaints >> .termux.log 2>&1
 
-curl -fLo ~/.ssh/vkaints.pub \
-    --create-dirs https://voz.dev/id_rsa.pub >> .termux.log 2>&1
+curl -fLo ~/.ssh/id_rsa.pub \
+    --create-dirs https://voz.dev/vkaints.pub >> .termux.log 2>&1
 
 # Termux extra row setup
 
