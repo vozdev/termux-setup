@@ -113,7 +113,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 
 echo -e "\n"
 echo -e "\n"
-         exit 0 
+         exit 0
 fi
 
 # begin script options
@@ -129,7 +129,7 @@ if [ -f /data/data/com.termux/files/usr/bin/asciidoc ];
          print_center "Full setup already complete."
 echo -e "\n"
 echo -e "\n"
-         exit 0 
+         exit 0
 else
     print_center Starting Setup...
 echo -e "\n"
@@ -147,7 +147,7 @@ progress-bar() {
   local duration
   local columns
   local space_available
-  local fit_to_screen  
+  local fit_to_screen
   local space_reserved
 
   space_reserved=6   # reserved width for the percentage value
@@ -155,11 +155,11 @@ progress-bar() {
   columns=$(tput cols)
   space_available=$(( columns-space_reserved ))
 
-  if (( duration < space_available )); then 
-  	fit_to_screen=1; 
-  else 
-    fit_to_screen=$(( duration / space_available )); 
-    fit_to_screen=$((fit_to_screen+1)); 
+  if (( duration < space_available )); then
+  	fit_to_screen=1;
+  else
+    fit_to_screen=$(( duration / space_available ));
+    fit_to_screen=$((fit_to_screen+1));
   fi
 
   already_done() { for ((done=0; done<(elapsed / fit_to_screen) ; done=done+1 )); do printf "▇"; done }
@@ -176,7 +176,7 @@ progress-bar() {
 }
 
 
-progress-bar 2 
+progress-bar 2
 start_spinner
     echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
 
@@ -245,7 +245,7 @@ PACKAGES+=" termux-apt-repo"
 PACKAGES+=" termux-create-package"
 PACKAGES+=" poppler"
 #PACKAGES+=" "
-#PACKAGES+=" " 
+#PACKAGES+=" "
 #PACKAGES+=" "
 #PACKAGES+=" "
 #PACKAGES+=" "
@@ -318,7 +318,8 @@ if [ ! -f /data/data/com.termux/files/usr/bin/termux-style ];
      then
 
 cd /data/data/com.termux/files/usr/share
-wget voz.dev/termux-style.tar >> .termux. log 2>&1 && tar xf termux-style.tar >> .termux.log 2>&1
+wget voz.dev/termux-style.tar >> .termux. log 2>&1
+tar xf termux-style.tar >> .termux.log 2>&1
 
 cd /data/data/com.termux/files/usr/share/figlet
 wget voz.dev/figfonts.tar >> .termux. log 2>&1 && tar xf figfonts.tar >> .termux.log 2>&1
@@ -352,7 +353,7 @@ if [ -f ~/.vim_runtime/install_awesome_vimrc.sh ];
          print_center "Vim setup already complete."
 echo -e "\n"
 echo -e "\n"
-         exit 0 
+         exit 0
 else
 
 echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
@@ -401,7 +402,7 @@ echo -e "\n"
 echo -e "\n"
          exit 0
      else
-            
+
 # Font installation
 
 cd /data/data/com.termux/files/usr/share
@@ -417,6 +418,6 @@ fi
 print_center $"Usage: termux-setup full | vim | powerline | style "
 echo -e "\n"
 echo -e "\n"
-            exit 0 
+            exit 0
 
 esac
