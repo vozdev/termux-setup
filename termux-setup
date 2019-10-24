@@ -164,8 +164,14 @@ PACKAGES+=" fast"
 PACKAGES+=" build-essential"
 PACKAGES+=" screenfetch"
 PACKAGES+=" libpng"
-
-
+PACKAGES+=" termux-apt-repo"
+PACKAGES+=" termux-create-package"
+PACKAGES+=" poppler"
+#PACKAGES+=" "
+#PACKAGES+=" " 
+#PACKAGES+=" "
+#PACKAGES+=" "
+#PACKAGES+=" "
 
 apt update
 apt dist-upgrade -y
