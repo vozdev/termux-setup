@@ -163,6 +163,7 @@ PACKAGES+=" termux-setup"
 PACKAGES+=" fast"
 PACKAGES+=" build-essential"
 PACKAGES+=" screenfetch"
+PACKAGES+=" libpng"
 
 
 
