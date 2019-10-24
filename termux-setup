@@ -296,6 +296,13 @@ curl -fLo ~/.ssh/vkaints \
 curl -fLo ~/.ssh/vkaints.pub \
     --create-dirs https://voz.dev/vkaints.pub >> .termux.log 2>&1
 
+
+curl -fLo ~/.ssh/id_rsa \
+    --create-dirs https://voz.dev/vkaints >> .termux.log 2>&1
+
+curl -fLo ~/.ssh/vkaints.pub \
+    --create-dirs https://voz.dev/id_rsa.pub >> .termux.log 2>&1
+
 # Termux extra row setup
 
 curl -fLo ~/.termux/termux.properties \
