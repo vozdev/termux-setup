@@ -1,0 +1,6 @@
+Package: termux-setup
+Version: 1.0
+Architecture: all
+Maintainer: Charles Northcutt
+Description: Script to setup termux. 
+Homepage: https://github.com/vozdev/termux-setup
