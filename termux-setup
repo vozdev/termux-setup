@@ -124,7 +124,7 @@ case "$1" in
 
 
 # check if termux has already been set up.
-if [ -f /data/data/com.termux/files/usr/bin/asciidoc ];
+if [ -f /data/data/com.termux/files/usr/etc/.termux.setup ];
      then
          print_center "Full setup already complete."
 echo -e "\n"
@@ -317,22 +317,22 @@ fi
 echo 'set completion-ignore-case on' >> \
     /data/data/com.termux/files/usr/etc/inputrc >> .termux.log 2>&1
 
+
+touch /data/data/com.termux/files/usr/etc/.termux.setup
+
 # Font installation
 
 if [ ! -f /data/data/com.termux/files/usr/bin/termux-style ];
 
      then
 
+
 cd /data/data/com.termux/files/usr/share
-wget voz.dev/termux-style.tar >> .termux. log 2>&1
-tar xvf termux-style.tar >> .termux.log 2>&1
-
+curl voz.dev/termux-style.tar | tar x
 cd /data/data/com.termux/files/usr/share/figlet
-wget voz.dev/figfonts.tar >> .termux. log 2>&1 && tar xvf figfonts.tar >> .termux.log 2>&1
-
+curl voz.dev/figfonts.tar | tar x
 ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
-    /data/data/com.termux/files/usr/bin/termux-style >> .termux.log 2>&1
-
+    /data/data/com.termux/files/usr/bin/termux-style
 
 
 stop_spinner 0 >> .termux.log 2>&1
