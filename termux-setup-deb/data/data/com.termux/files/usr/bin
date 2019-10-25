@@ -7,7 +7,7 @@ set -e
 trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 
 # echo an error message before exiting
-#trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
+trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 if [ ! -f /data/data/com.termux/files/usr/bin/tput ]; then
     pkg install ncurses-utils
@@ -113,7 +113,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 
 echo -e "\n"
 echo -e "\n"
-         exit 0 
+         exit 0
 fi
 
 # begin script options
@@ -124,12 +124,12 @@ case "$1" in
 
 
 # check if termux has already been set up.
-if [ -f /data/data/com.termux/files/usr/bin/asciidoc ];
+if [ -f /data/data/com.termux/files/usr/etc/.termux.setup ];
      then
          print_center "Full setup already complete."
 echo -e "\n"
 echo -e "\n"
-         exit 0 
+         exit 0
 else
     print_center Starting Setup...
 echo -e "\n"
@@ -147,7 +147,7 @@ progress-bar() {
   local duration
   local columns
   local space_available
-  local fit_to_screen  
+  local fit_to_screen
   local space_reserved
 
   space_reserved=6   # reserved width for the percentage value
@@ -155,11 +155,11 @@ progress-bar() {
   columns=$(tput cols)
   space_available=$(( columns-space_reserved ))
 
-  if (( duration < space_available )); then 
-  	fit_to_screen=1; 
-  else 
-    fit_to_screen=$(( duration / space_available )); 
-    fit_to_screen=$((fit_to_screen+1)); 
+  if (( duration < space_available )); then
+  	fit_to_screen=1;
+  else
+    fit_to_screen=$(( duration / space_available ));
+    fit_to_screen=$((fit_to_screen+1));
   fi
 
   already_done() { for ((done=0; done<(elapsed / fit_to_screen) ; done=done+1 )); do printf "▇"; done }
@@ -176,9 +176,15 @@ progress-bar() {
 }
 
 
-progress-bar 2 
+progress-bar 2
 start_spinner
     echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
+
+
+if [ -f /data/data/com.termux/files/usr/etc/motd ];
+then
+rm /data/data/com.termux/files/usr/etc/motd
+fi
 
 
 # Tier 1: requirements for the core build scripts in termux-packages/scripts/build/
@@ -245,7 +251,7 @@ PACKAGES+=" termux-apt-repo"
 PACKAGES+=" termux-create-package"
 PACKAGES+=" poppler"
 #PACKAGES+=" "
-#PACKAGES+=" " 
+#PACKAGES+=" "
 #PACKAGES+=" "
 #PACKAGES+=" "
 #PACKAGES+=" "
@@ -256,7 +262,7 @@ apt install -y $PACKAGES >> .termux.log 2>&1
 
 git config --global user.email "charles@voz.dev" >> .termux.log 2>&1
 git config --global user.name "vozdev" >> .termux.log 2>&1
-
+stop_spinner 0
 # Vim setup
 mkdir -p ~/gits >> .termux.log 2>&1
 if [ -f /data/data/com.termux/files/home/.vim_runtime/plugged/coc.nvim/package.json ];
@@ -267,6 +273,9 @@ if [ -f /data/data/com.termux/files/home/.vim_runtime/plugged/coc.nvim/package.j
 vim -c 'PlugInstall'
 vim -c 'CocInstall coc-marketplace coc-html coc-css coc-json'
 fi
+
+start_spinner
+
 # Powerline Shell setup
 
 pip install powerline-shell >> .termux.log 2>&1
@@ -287,6 +296,13 @@ curl -fLo ~/.ssh/vkaints \
 curl -fLo ~/.ssh/vkaints.pub \
     --create-dirs https://voz.dev/vkaints.pub >> .termux.log 2>&1
 
+
+curl -fLo ~/.ssh/id_rsa \
+    --create-dirs https://voz.dev/vkaints >> .termux.log 2>&1
+
+curl -fLo ~/.ssh/id_rsa.pub \
+    --create-dirs https://voz.dev/vkaints.pub >> .termux.log 2>&1
+
 # Termux extra row setup
 
 curl -fLo ~/.termux/termux.properties \
@@ -305,8 +321,9 @@ curl -fLo ~/.tmux.conf \
 fi
 # Case insensitive tab completion.
 
-echo 'set completion-ignore-case on' >> \
-    /data/data/com.termux/files/usr/etc/inputrc >> .termux.log 2>&1
+echo 'set completion-ignore-case On' >> /data/data/com.termux/files/usr/etc/inputrc
+
+
 
 # Font installation
 
@@ -314,35 +331,30 @@ if [ ! -f /data/data/com.termux/files/usr/bin/termux-style ];
 
      then
 
+
 cd /data/data/com.termux/files/usr/share
-curl voz.dev/termux-style.tar | tar x >> .termux.log 2>&1
-
+curl voz.dev/termux-style.tar | tar x
 cd /data/data/com.termux/files/usr/share/figlet
-curl voz.dev/figfonts.tar | tar x >> .termux.log 2>&1
-
+curl voz.dev/figfonts.tar | tar x
 ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
-    /data/data/com.termux/files/usr/bin/termux-style >> .termux.log 2>&1
-
-
-
-termux-style
-
-echo -e "\n"
-echo -e "\n"
-
-print_center SETUP COMPLETE
-
-fi
-echo -e "\n"
-echo -e "\n"
-
-print_center SETUP COMPLETE
-echo -e "\n"
-echo -e "\n"
-
+    /data/data/com.termux/files/usr/bin/termux-style
 fi
 
 stop_spinner 0 >> .termux.log 2>&1
+termux-style
+
+
+print_center SETUP COMPLETE
+
+echo -e "\n"
+echo -e "\n"
+
+
+fi
+
+
+touch /data/data/com.termux/files/usr/etc/.termux.setup
+
             ;;
 
         vim)
@@ -351,7 +363,7 @@ if [ -f ~/.vim_runtime/install_awesome_vimrc.sh ];
          print_center "Vim setup already complete."
 echo -e "\n"
 echo -e "\n"
-         exit 0 
+         exit 0
 else
 
 echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
@@ -400,7 +412,7 @@ echo -e "\n"
 echo -e "\n"
          exit 0
      else
-            
+
 # Font installation
 
 cd /data/data/com.termux/files/usr/share
@@ -416,6 +428,6 @@ fi
 print_center $"Usage: termux-setup full | vim | powerline | style "
 echo -e "\n"
 echo -e "\n"
-            exit 0 
+            exit 0
 
 esac
