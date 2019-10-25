@@ -324,7 +324,6 @@ fi
 echo 'set completion-ignore-case On' >> /data/data/com.termux/files/usr/etc/inputrc
 
 
-touch /data/data/com.termux/files/usr/etc/.termux.setup
 
 # Font installation
 
@@ -339,7 +338,7 @@ cd /data/data/com.termux/files/usr/share/figlet
 curl voz.dev/figfonts.tar | tar x
 ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
     /data/data/com.termux/files/usr/bin/termux-style
-
+fi
 
 stop_spinner 0 >> .termux.log 2>&1
 termux-style
@@ -347,20 +346,15 @@ termux-style
 
 print_center SETUP COMPLETE
 
-fi
 echo -e "\n"
 echo -e "\n"
 
-print_center SETUP COMPLETE
-echo -e "\n"
-echo -e "\n"
 
 fi
 
 
 touch /data/data/com.termux/files/usr/etc/.termux.setup
 
-stop_spinner 0 >> .termux.log 2>&1
             ;;
 
         vim)
