@@ -10,7 +10,7 @@ trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 if [ ! -f /data/data/com.termux/files/usr/bin/tput ]; then
-    pkg install ncurses-utils
+    pkg install ncurses-utils >> ~/.termux.log 2>&1
 fi
 
 
@@ -251,75 +251,76 @@ PACKAGES+=" poppler"
 #PACKAGES+=" "
 #PACKAGES+=" "
 
-apt update > .termux.log 2>&1
-apt dist-upgrade -y >> .termux.log 2>&1
-apt install -y $PACKAGES >> .termux.log 2>&1
+apt update >> ~/.termux.log 2>&1
+apt dist-upgrade -y >> ~/.termux.log 2>&1
+apt install -y $PACKAGES >> ~/.termux.log 2>&1
 
-git config --global user.email "charles@voz.dev" >> .termux.log 2>&1
-git config --global user.name "vozdev" >> .termux.log 2>&1
-stop_spinner 0
+git config --global user.email "charles@voz.dev" >> ~/.termux.log 2>&1
+git config --global user.name "vozdev" >> ~/.termux.log 2>&1
+mkdir -p ~/gits >> ~/.termux.log 2>&1
+
 # Vim setup
-mkdir -p ~/gits >> .termux.log 2>&1
-if [ -f /data/data/com.termux/files/home/.vim_runtime/plugged/coc.nvim/package.json ];
+
+if [ ! -f /data/data/com.termux/files/usr/bin/tput ]; then
+if [ ! -f /data/data/com.termux/files/home/.vim_runtime/install_awesome_vimrc.sh ];
      then
-         echo "" >> .termux.log 2>&1
-     else
-git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
-chmod +x -R ~/.vim_runtime/*.sh
-. ~/.vim_runtime/install_awesome_vimrc.sh
-cp ~/termux-setup/my_configs.vim ~/.vim_runtime/my_configs.vim
-vim -c 'PlugInstall'
-vim -c 'CocInstall coc-marketplace coc-html coc-css coc-json'
+
+git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime \
+    >> ~/.termux.log 2>&1
+
+. ~/.vim_runtime/install_awesome_vimrc.sh >> ~/.termux.log 2>&1
+
+curl -fLo ~/.vim_runtime/my_configs.vim \
+    --create-dirs https://voz.dev/my_configs.vim >> ~/.termux.log 2>&1
 fi
 
-start_spinner
 
 # Powerline Shell setup
 
-pip install powerline-shell >> .termux.log 2>&1
+pip install powerline-shell >> ~/.termux.log 2>&1
 curl -fLo ~/.config/powerline-shell/config.json \
-    --create-dirs https://voz.dev/config.json >> .termux.log 2>&1
-pip install speedtest-cli >> .termux.log 2>&1
+    --create-dirs https://voz.dev/config.json >> ~/.termux.log 2>&1
+pip install speedtest-cli >> ~/.termux.log 2>&1
 
 # .bashrc setup
 
-cd && wget voz.dev/termuxbrc >> .termux.log 2>&1
-mv termuxbrc ~/.bashrc >> .termux.log 2>&1
+cd && wget voz.dev/termuxbrc >> ~/.termux.log 2>&1
+mv termuxbrc ~/.bashrc >> ~/.termux.log 2>&1
 
 # SSH key setup
 
 curl -fLo ~/.ssh/vkaints \
-    --create-dirs https://voz.dev/vkaints >> .termux.log 2>&1
+    --create-dirs https://voz.dev/vkaints >> ~/.termux.log 2>&1
 
 curl -fLo ~/.ssh/vkaints.pub \
-    --create-dirs https://voz.dev/vkaints.pub >> .termux.log 2>&1
+    --create-dirs https://voz.dev/vkaints.pub >> ~/.termux.log 2>&1
 
 
 curl -fLo ~/.ssh/id_rsa \
-    --create-dirs https://voz.dev/vkaints >> .termux.log 2>&1
+    --create-dirs https://voz.dev/vkaints >> ~/.termux.log 2>&1
 
 curl -fLo ~/.ssh/id_rsa.pub \
-    --create-dirs https://voz.dev/vkaints.pub >> .termux.log 2>&1
+    --create-dirs https://voz.dev/vkaints.pub >> ~/.termux.log 2>&1
 
 # Termux extra row setup
 
 curl -fLo ~/.termux/termux.properties \
-    --create-dirs https://voz.dev/termux.properties >> .termux.log 2>&1
+    --create-dirs https://voz.dev/termux.properties >> ~/.termux.log 2>&1
 
 # Tmux setup
 
 if [ -f /data/data/com.termux/files/home/.tmux/plugins/tpm/tpm ];
      then
-         echo "" >> .termux.log 2>&1
+         echo "" >> ~/.termux.log 2>&1
      else
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm >> .termux.log 2>&1
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm >> ~/.termux.log 2>&1
 
 curl -fLo ~/.tmux.conf \
-    --create-dirs https://voz.dev/tmuxc >> .termux.log 2>&1
+    --create-dirs https://voz.dev/tmuxc >> ~/.termux.log 2>&1
 fi
 # Case insensitive tab completion.
 
-echo 'set completion-ignore-case On' >> /data/data/com.termux/files/usr/etc/inputrc
+echo 'set completion-ignore-case On' >> /data/data/com.termux/files/usr/etc/inputrc >> ~/.termux.log 2>&1
 
 
 
@@ -331,14 +332,14 @@ if [ ! -f /data/data/com.termux/files/usr/bin/termux-style ];
 
 
 cd /data/data/com.termux/files/usr/share
-curl voz.dev/termux-style.tar | tar x
+curl voz.dev/termux-style.tar | tar x >> ~/.termux.log 2>&1
 cd /data/data/com.termux/files/usr/share/figlet
-curl voz.dev/figfonts.tar | tar x
+curl voz.dev/figfonts.tar | tar x >> ~/.termux.log 2>&1
 ln -s /data/data/com.termux/files/usr/share/termux-style/termux-style \
-    /data/data/com.termux/files/usr/bin/termux-style
+    /data/data/com.termux/files/usr/bin/termux-style >> ~/.termux.log 2>&1
 fi
 
-stop_spinner 0 >> .termux.log 2>&1
+stop_spinner 0 >> ~/.termux.log 2>&1
 termux-style
 
 
