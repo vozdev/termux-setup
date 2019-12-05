@@ -369,7 +369,7 @@ fi
 
 
 touch /data/data/com.termux/files/home/.termux.setup-complete
-
+ssh -T git@github.com
             ;;
 
         vim)
