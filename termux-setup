@@ -266,8 +266,10 @@ if [ -f /data/data/com.termux/files/home/.vim_runtime/plugged/coc.nvim/package.j
          echo "" >> .termux.log 2>&1
      else
 git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
-sh ~/.vim_runtime/install_awesome_vimrc.sh
-mv ~/termux-setup/my_configs.vim ~/.vim_runtime/
+chmod +x -R ~/.vim_runtime/*.sh
+. ~/.vim_runtime/install_awesome_vimrc.sh
+rm ~/.vim_runtime/my_configs.vim
+cp ~/termux-setup/my_configs.vim ~/.vim_runtime/my_configs.vim
 vim -c 'PlugInstall'
 vim -c 'CocInstall coc-marketplace coc-html coc-css coc-json'
 fi
