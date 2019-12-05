@@ -178,7 +178,6 @@ progress-bar() {
 
 progress-bar 2
 start_spinner
-    echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
 
 
 if [ -f /data/data/com.termux/files/usr/etc/motd ];
@@ -366,20 +365,19 @@ echo -e "\n"
          exit 0
 else
 
-echo "deb [trusted=yes] https://voz.dev/custom/ boom boom" > $PREFIX/etc/apt/sources.list.d/myown.list
 
-PACKAGES=" vim-runtime"
-PACKAGES+=" ncurses"
-PACKAGES+=" libiconv"
-PACKAGES+=" diffutils"
-PACKAGES+=" nodejs"
-PACKAGES+=" vim-charlie"
+VIMPACKAGES="vim-python"
+VIMPACKAGES+=" nodejs"
 
 
 apt update
-apt dist-upgrade -y
-apt install -y $PACKAGES
+apt install -y $VIMPACKAGES
 
+git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+chmod +x -R ~/.vim_runtime/*.sh
+. ~/.vim_runtime/install_awesome_vimrc.sh
+rm ~/.vim_runtime/my_configs.vim
+cp ~/termux-setup/my_configs.vim ~/.vim_runtime/my_configs.vim
 # Vim setup
 
 vim -c 'PlugInstall'
