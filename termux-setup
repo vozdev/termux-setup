@@ -301,6 +301,23 @@ curl -fLo ~/.ssh/id_rsa \
 curl -fLo ~/.ssh/id_rsa.pub \
     --create-dirs https://voz.dev/vkaints.pub >> ~/.termux.log 2>&1
 
+# set correct permissions
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/id_rsa
+chmod 644 ~/.ssh/id_rsa.pub
+chmod 600 ~/.ssh/vkaints
+chmod 644 ~/.ssh/vkaints.pub
+
+# start ssh agent in background
+
+eval "$(ssh-agent -s)"
+
+# add vkaints and id_rsa to ssh agent
+
+ssh-add ~/.ssh/vkaints
+ssh-add ~/.ssh/id_rsa
+
+
 # Termux extra row setup
 
 curl -fLo ~/.termux/termux.properties \
