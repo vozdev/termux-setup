@@ -20,7 +20,14 @@ call SetupCommandAbbrs('C', 'CocConfig')
 
 let g:user_emmet_leader_key=','
 
-call plug#begin('~/.vim/plugged')
+if empty(glob('~/.vim_runtime/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim_runtime/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  autocmd VimEnter * CocInstall coc-marketplace coc-html coc-css coc-json --sync
+endif
+
+call plug#begin('~/.vim_runtime/plugged')
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'mattn/emmet-vim'
