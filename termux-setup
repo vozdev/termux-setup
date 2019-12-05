@@ -261,7 +261,6 @@ mkdir -p ~/gits >> ~/.termux.log 2>&1
 
 # Vim setup
 
-if [ ! -f /data/data/com.termux/files/usr/bin/tput ]; then
 if [ ! -f /data/data/com.termux/files/home/.vim_runtime/install_awesome_vimrc.sh ];
      then
 
