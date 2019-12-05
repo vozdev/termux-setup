@@ -351,7 +351,7 @@ echo -e "\n"
 fi
 
 
-touch /data/data/com.termux/files/usr/etc/.termux.setup
+touch /data/data/com.termux/files/home/.termux.setup-complete
 
             ;;
 
